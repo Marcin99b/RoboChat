@@ -19,7 +19,6 @@ namespace RoboChat.Console
 
             public ChatApp()
             {
-                roboChat = new Library.RoboChat();
             }
 
             public void RunConsoleChat()
@@ -45,7 +44,7 @@ namespace RoboChat.Console
                 System.Console.Write($"{userName}: ");
                 var text = System.Console.ReadLine();
                 System.Console.Clear();
-                return new TextLine(userName, text, DateTime.UtcNow);
+                return new TextLine(userName, text);
             }
             
         }
