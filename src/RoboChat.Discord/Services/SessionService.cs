@@ -180,7 +180,7 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
                 return;
             }
-            if (session.RoboChat.NumberOfMessagesInCurrentSession() == 0)
+            if (session.RoboChat.NumberOfMessagesInCurrentSession == 0)
             {
                 await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message");
                 return;
