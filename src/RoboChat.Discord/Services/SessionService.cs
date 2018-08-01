@@ -39,7 +39,7 @@ namespace RoboChat.Discord.Services
             }
             
             */
-            chatSessions = new List<ChatSession>();
+            
             
         }
 
@@ -82,7 +82,7 @@ namespace RoboChat.Discord.Services
 
             if (sessionToMerge == null)
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot search session  in room: {socketMessage.Channel.Name}");
+                await socketMessage.Channel.SendMessageAsync($"Cannot search session in room: {socketMessage.Channel.Name}");
                 return null;
             }
             return sessionToMerge;
@@ -180,6 +180,12 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
                 return;
             }
+            if (session.RoboChat.NumberOfMessagesInCurrentSession() == 0)
+            {
+                await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message");
+                return;
+            }
+
             await SendResponseWithLoading(socketMessage);
             session.RoboChat.MergeHistory();
             await socketMessage.Channel.SendMessageAsync($"```Merged session for user: {session.SessionOwner} in room: {session.RoomName} by user: {GetFullUsername(socketMessage)}```");

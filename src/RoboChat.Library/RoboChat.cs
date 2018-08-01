@@ -101,5 +101,10 @@ namespace RoboChat.Library
         {
             return validSentences.Skip(new Random().Next(validSentences.Count())).First().Message;
         }
+
+        public int NumberOfMessagesInCurrentSession()
+        {
+            return currentSessionMessagesHistory.Count;
+        }
     }
 }
