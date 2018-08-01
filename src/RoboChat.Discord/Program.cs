@@ -68,6 +68,7 @@ namespace RoboChat.Discord
 
             if (message.StartsWith("/session -start"))
             {
+
                 await sessionService.CreateNewSession(socketMessage);
                 return;
             }

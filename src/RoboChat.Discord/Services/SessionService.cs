@@ -111,6 +111,17 @@ namespace RoboChat.Discord.Services
                                                          $"/session -merge (for admins)\n" +
                                                          $"/bot (for authors)```");
         }
+
+        public async Task SendResponseWithLoading(SocketMessage socketMessage)
+        {
+            await socketMessage.Channel.SendMessageAsync($"**Loading... It may take a few seconds.**");
+        }
+
+        public async Task SendResponseWithInfoAboutOffline(SocketMessage socketMessage)
+        {
+            await socketMessage.Channel.SendMessageAsync("**If bot \"RoboChat\" is offline, bot is not working.**");
+        }
+
         public async Task ReadyToMerge(SocketMessage socketMessage, IMessageChannel messageChannel)
         {
             var session = await GetThisRoomChatSession(socketMessage);
@@ -133,9 +144,14 @@ namespace RoboChat.Discord.Services
         {
             if (chatSessions.Any(x => x.RoomName == socketMessage.Channel.Name))
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot search session in room: {socketMessage.Channel.Name}, because other user has session here");
+                await socketMessage.Channel.SendMessageAsync($"Cannot create session in room: {socketMessage.Channel.Name}, because other user has session here");
                 return;
             }
+
+            await DeleteMessages(socketMessage);
+            await SendResponseWithListOfCommands(socketMessage);
+            await SendResponseWithLoading(socketMessage);
+
             var learnFaster = socketMessage.Content.Contains(" -learn faster");
             
             var settings = new SessionSettings($"{GetFullUsername(socketMessage)}--{socketMessage.Channel.Name}", learnFaster);
@@ -164,6 +180,7 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
                 return;
             }
+            await SendResponseWithLoading(socketMessage);
             session.RoboChat.MergeHistory();
             await socketMessage.Channel.SendMessageAsync($"```Merged session for user: {session.SessionOwner} in room: {session.RoomName} by user: {GetFullUsername(socketMessage)}```");
         }
@@ -180,13 +197,14 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"Cannot delete session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
                 return;
             }
-
+            await SendResponseWithLoading(socketMessage);
             session.RoboChat.DeleteSessionChat();
             chatSessions.Remove(session);
             await socketMessage.Channel.SendMessageAsync($"```Deleted session for user: {session.SessionOwner} in room: {session.RoomName}```");
 
             await DeleteMessages(socketMessage);
             await SendResponseWithListOfCommands(socketMessage);
+            await SendResponseWithInfoAboutOffline(socketMessage);
             UpdateSessionsFile();
         }
 
@@ -196,8 +214,7 @@ namespace RoboChat.Discord.Services
             var messages = await channel.GetMessagesAsync().Flatten();
             await channel.DeleteMessagesAsync(messages);
         }
-
-        //TODO
+        
         private void UpdateSessionsFile()
         {
             //File.WriteAllText(sessionsFileName, JsonConvert.SerializeObject(chatSessions));

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using RoboChat.Library.Settings;
@@ -11,10 +12,7 @@ namespace RoboChat.Library
     public class RoboChat
     {
         private readonly IMongoDatabase database;
-        //private IMongoCollection<HistoryMessage> messagesCollection => database.GetCollection<HistoryMessage>("RoboChatMessages");
-
-        private readonly string tempHistoryFilePath = @"TempHistory.txt";
-        private string tempSessionHistoryFilePath => $@"TempHistory-{sessionSettings.SessionName}.txt";
+        private IMongoCollection<HistoryMessage> messagesCollection => database.GetCollection<HistoryMessage>("RoboChatMessages");
         
         private readonly List<HistoryMessage> basedMessagesHistory;
         private List<HistoryMessage> currentSessionMessagesHistory;
@@ -27,55 +25,32 @@ namespace RoboChat.Library
         
         public RoboChat(SessionSettings settings)
         {
+            database = MongoConfigurator.Connect();
             smilarityProcessor = new SmilarityProcessor();
             sessionSettings = settings;
             currentSessionMessagesHistory = new List<HistoryMessage>();
             this.roboUsername = $"RoboChat";
 
-            if (!File.Exists(tempHistoryFilePath))
+            try
             {
-                try
-                {
-                    File.Create(tempHistoryFilePath).Dispose();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+                basedMessagesHistory = messagesCollection.FindSync(_ => true).ToList();
             }
-            if (!File.Exists(tempSessionHistoryFilePath))
+            catch (Exception e)
             {
-                try
-                {
-                    File.Create(tempSessionHistoryFilePath).Dispose();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-
-            var fileHistory = JsonConvert.DeserializeObject<List<HistoryMessage>>(File.ReadAllText(tempHistoryFilePath));
-            if (fileHistory != null)
-            {
-                basedMessagesHistory = fileHistory;
-            }
-            else
-            {
+                Console.WriteLine(e.Message);
                 basedMessagesHistory = new List<HistoryMessage>();
             }
         }
 
         public void MergeHistory()
         {
-            var fullHistoryJson = JsonConvert.SerializeObject(FullSessionMessagesHistory);
-            File.WriteAllText(tempHistoryFilePath, fullHistoryJson);
+            messagesCollection.InsertMany(currentSessionMessagesHistory);
             currentSessionMessagesHistory = new List<HistoryMessage>();
         }
 
         public void DeleteSessionChat()
         {
-            File.Delete(tempSessionHistoryFilePath);
+            currentSessionMessagesHistory = new List<HistoryMessage>();
         }
 
         public string SendMessage(TextLine userMessage)
@@ -88,10 +63,11 @@ namespace RoboChat.Library
             }
             
             var reaction = GetRoboChatReaction(userMessage);
-            currentSessionMessagesHistory.Add(new HistoryMessage(reaction, null));
-            File.WriteAllText(tempSessionHistoryFilePath, JsonConvert.SerializeObject(currentSessionMessagesHistory));
+            var currentMessage = new HistoryMessage(reaction, null);
+            currentSessionMessagesHistory.Add(currentMessage);
             return reaction.Message;
         }
+
         private TextLine GetRoboChatReaction(TextLine userMessage)
         {
             var validSentences = new List<ValidSentence>();

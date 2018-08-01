@@ -17,12 +17,7 @@ namespace RoboChat.Library
         public static IMongoDatabase Connect()
         {
             //var connectionString = new MongoUrl("mongodb://chathistoryuser:eaugfb43eubagfb431naenfaei@ds237120.mlab.com:37120/robochat");
-            var connectionString = new MongoUrl("mongodb://user:SGWStUy9hnMgE5PV5CWqw4zuZmTcASnb3Bwe3aRzBmL9Yh@ds229388.mlab.com:29388/hated");
-            MongoClientSettings settings = new MongoClientSettings
-            {
-                Credential = MongoCredential.CreateCredential("hated", "user", "SGWStUy9hnMgE5PV5CWqw4zuZmTcASnb3Bwe3aRzBmL9Yh"),
-                Server = new MongoServerAddress(connectionString.ToString(), 29388)
-            };
+            var connectionString = new MongoUrl("mongodb://admin:Admin123@ds020218.mlab.com:20218/discordbot");
             MongoClient client = new MongoClient(connectionString.ToString());
             return client.GetDatabase(connectionString.DatabaseName);
         }
