@@ -223,6 +223,9 @@ namespace RoboChat.Discord.Services
         
         public async Task ClearRoom(SocketMessage socketMessage)
         {
+            if (GetThisRoomChatSession(socketMessage) != null)
+                return;
+
             await DeleteMessages(socketMessage);
             await SendResponseWithListOfCommands(socketMessage);
             await SendResponseWithInfoAboutOffline(socketMessage);
