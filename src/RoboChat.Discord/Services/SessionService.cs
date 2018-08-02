@@ -224,7 +224,10 @@ namespace RoboChat.Discord.Services
         public async Task ClearRoom(SocketMessage socketMessage)
         {
             if (GetThisRoomChatSession(socketMessage) != null)
+            {
+                await socketMessage.Channel.SendMessageAsync($"```You cannot clear the room, because there is an active session```");
                 return;
+            }
 
             await DeleteMessages(socketMessage);
             await SendResponseWithListOfCommands(socketMessage);
