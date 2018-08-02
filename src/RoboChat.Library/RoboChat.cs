@@ -18,7 +18,6 @@ namespace RoboChat.Library
         private List<HistoryMessage> currentSessionMessagesHistory;
         public int NumberOfMessagesInCurrentSession => currentSessionMessagesHistory.Count;
         public IEnumerable<HistoryMessage> FullSessionMessagesHistory => basedMessagesHistory.mergeCollections(currentSessionMessagesHistory);
-        public int NumberOfMessagesInCurrentSession => currentSessionMessagesHistory.Count;
 
         private readonly string roboUsername;
 

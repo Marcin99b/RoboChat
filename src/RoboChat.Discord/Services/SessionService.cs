@@ -65,7 +65,8 @@ namespace RoboChat.Discord.Services
             await socketMessage.Channel.SendMessageAsync(response);
             
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\nFrom: {GetFullUsername(socketMessage)}");
+            Console.WriteLine("");
+            Console.WriteLine($"From: {GetFullUsername(socketMessage)}");
             Console.WriteLine(message);
             Console.WriteLine();
             Console.WriteLine($"To: {GetFullUsername(socketMessage)}");
@@ -107,6 +108,7 @@ namespace RoboChat.Discord.Services
                                                          $"/session -delete (for admins and authors)\n" +
                                                          $"/session -ready (for authors)\n" +
                                                          $"/session -merge (for admins)\n" +
+                                                         $"/room -clear (for all)\n" +
                                                          $"/bot (for authors)```");
         }
 

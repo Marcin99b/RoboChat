@@ -70,12 +70,7 @@ namespace RoboChat.Discord
                 return;
             }
 
-            if (socketMessage.Channel.Name.Contains("test") && !isDebugMode)
-            {
-                return;
-            }
-
-            if (!socketMessage.Channel.Name.Contains("test") && isDebugMode)
+            if (socketMessage.Channel.Name.Contains("test") != isDebugMode)
             {
                 return;
             }
