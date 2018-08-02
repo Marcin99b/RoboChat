@@ -47,7 +47,7 @@ namespace RoboChat.Discord.Services
                 .FirstOrDefault(x => x.SessionOwner == GetFullUsername(socketMessage));
             if (currentSssion == null)
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot search session for user: {GetFullUsername(socketMessage)} in room: {socketMessage.Channel.Name}");
+                await socketMessage.Channel.SendMessageAsync($"```This room doesn't have any session. If you want to start a conversation, you need to write: /session -start```");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace RoboChat.Discord.Services
 
             if (sessionToMerge == null)
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot search session in room: {socketMessage.Channel.Name}");
+                //await socketMessage.Channel.SendMessageAsync($"Cannot search session in room: {socketMessage.Channel.Name}");
                 return null;
             }
             return sessionToMerge;
@@ -92,10 +92,10 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
-                await socketMessage.Channel.SendMessageAsync($"This room is empty, you can create session: /start-session");
+                await socketMessage.Channel.SendMessageAsync($"```This room is empty, you can create a new session: /start-session```");
                 return;
             }
-            await socketMessage.Channel.SendMessageAsync($"Session in room: {socketMessage.Channel.Name} has author: {session.SessionOwner}");
+            await socketMessage.Channel.SendMessageAsync($"```Session in room: {socketMessage.Channel.Name} has author: {session.SessionOwner}```");
         }
 
         public async Task SendResponseWithListOfCommands(SocketMessage socketMessage)
@@ -119,7 +119,7 @@ namespace RoboChat.Discord.Services
 
         public async Task SendResponseWithInfoAboutOffline(SocketMessage socketMessage)
         {
-            await socketMessage.Channel.SendMessageAsync("**If bot \"RoboChat\" is offline, bot is not working.**");
+            await socketMessage.Channel.SendMessageAsync("***```If bot \"RoboChat\" is offline, bot is not working!```***");
         }
 
         public async Task ReadyToMerge(SocketMessage socketMessage, IMessageChannel messageChannel)
@@ -127,16 +127,17 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
+                await socketMessage.Channel.SendMessageAsync($"```There is no session in this room, you can create a new session: /start-session```");
                 return;
             }
 
             if (session.SessionOwner != GetFullUsername(socketMessage) && !IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot set as ready session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
+                await socketMessage.Channel.SendMessageAsync($"```Cannot set as ready session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
                 return;
             }
 
-            await socketMessage.Channel.SendMessageAsync($"Admins have been notified about the session with user: {session.SessionOwner} in room: {session.RoomName}");
+            await socketMessage.Channel.SendMessageAsync($"```Admins have been notified about the session with user: {session.SessionOwner} in room: {session.RoomName}```");
             await messageChannel.SendMessageAsync($"```Session with user: {session.SessionOwner} in room: {session.RoomName} is ready for merge```");
         }
 
@@ -144,7 +145,7 @@ namespace RoboChat.Discord.Services
         {
             if (chatSessions.Any(x => x.RoomName == socketMessage.Channel.Name))
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot create session in room: {socketMessage.Channel.Name}, because other user has session here");
+                await socketMessage.Channel.SendMessageAsync($"```Cannot create session in room: {socketMessage.Channel.Name}, because other user has session here```");
                 return;
             }
 
@@ -173,16 +174,17 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
+                await socketMessage.Channel.SendMessageAsync($"```There is no session in this room, you can create a new session: /start-session```");
                 return;
             }
             if (!IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
+                await socketMessage.Channel.SendMessageAsync($"```Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
                 return;
             }
             if (session.RoboChat.NumberOfMessagesInCurrentSession == 0)
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message");
+                await socketMessage.Channel.SendMessageAsync($"```Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message```");
                 return;
             }
 
@@ -196,11 +198,12 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
+                await socketMessage.Channel.SendMessageAsync($"```There is no session in this room, you can create a new session: /start-session```");
                 return;
             }
             if (session.SessionOwner != GetFullUsername(socketMessage) && !IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"Cannot delete session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission");
+                await socketMessage.Channel.SendMessageAsync($"```Cannot delete session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
                 return;
             }
             await SendResponseWithLoading(socketMessage);
@@ -223,7 +226,8 @@ namespace RoboChat.Discord.Services
         
         public async Task ClearRoom(SocketMessage socketMessage)
         {
-            if (GetThisRoomChatSession(socketMessage) != null)
+            var session = await GetThisRoomChatSession(socketMessage);
+            if (session != null)
             {
                 await socketMessage.Channel.SendMessageAsync($"```You cannot clear the room, because there is an active session```");
                 return;
