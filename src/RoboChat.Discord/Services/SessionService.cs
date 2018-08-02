@@ -221,6 +221,13 @@ namespace RoboChat.Discord.Services
             await channel.DeleteMessagesAsync(messages);
         }
         
+        public async Task ClearRoom(SocketMessage socketMessage)
+        {
+            await DeleteMessages(socketMessage);
+            await SendResponseWithListOfCommands(socketMessage);
+            await SendResponseWithInfoAboutOffline(socketMessage);
+        }
+
         private void UpdateSessionsFile()
         {
             //File.WriteAllText(sessionsFileName, JsonConvert.SerializeObject(chatSessions));
