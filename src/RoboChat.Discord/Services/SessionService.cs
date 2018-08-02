@@ -67,7 +67,7 @@ namespace RoboChat.Discord.Services
             await socketMessage.Channel.SendMessageAsync(response);
             
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"From: {GetFullUsername(socketMessage)}");
+            Console.WriteLine($"\nFrom: {GetFullUsername(socketMessage)}");
             Console.WriteLine(message);
             Console.WriteLine();
             Console.WriteLine($"To: {GetFullUsername(socketMessage)}");
