@@ -39,7 +39,6 @@ namespace RoboChat.Discord.Services
             }
             
             */
-            
         }
 
         public async Task SendResponseToUser(SocketMessage socketMessage)
