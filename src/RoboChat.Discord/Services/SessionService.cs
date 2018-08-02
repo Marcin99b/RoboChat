@@ -190,9 +190,6 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
-                await DeleteMessages(socketMessage);
-                await SendResponseWithListOfCommands(socketMessage);
-                await SendResponseWithInfoAboutOffline(socketMessage);
                 return;
             }
             if (session.SessionOwner != GetFullUsername(socketMessage) && !IsAdmin(socketMessage))
@@ -218,6 +215,13 @@ namespace RoboChat.Discord.Services
             await channel.DeleteMessagesAsync(messages);
         }
         
+        public async Task ClearRoom(SocketMessage socketMessage)
+        {
+            await DeleteMessages(socketMessage);
+            await SendResponseWithListOfCommands(socketMessage);
+            await SendResponseWithInfoAboutOffline(socketMessage);
+        }
+
         private void UpdateSessionsFile()
         {
             //File.WriteAllText(sessionsFileName, JsonConvert.SerializeObject(chatSessions));

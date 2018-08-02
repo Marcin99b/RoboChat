@@ -104,6 +104,12 @@ namespace RoboChat.Discord
                 await sessionService.SendResponseWithSessionAuthor(socketMessage);
                 return;
             }
+
+            if (message.StartsWith("/room -clear"))
+            {
+                await sessionService.ClearRoom(socketMessage);
+                return;
+            }
         }
 
         private Task Log(LogMessage msg)
