@@ -184,6 +184,7 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message");
                 return;
             }
+
             await SendResponseWithLoading(socketMessage);
             session.RoboChat.MergeHistory();
             await socketMessage.Channel.SendMessageAsync($"```Merged session for user: {session.SessionOwner} in room: {session.RoomName} by user: {GetFullUsername(socketMessage)}```");
