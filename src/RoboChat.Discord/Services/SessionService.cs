@@ -39,8 +39,6 @@ namespace RoboChat.Discord.Services
             }
             
             */
-            
-            
         }
 
         public async Task SendResponseToUser(SocketMessage socketMessage)
@@ -67,6 +65,7 @@ namespace RoboChat.Discord.Services
             await socketMessage.Channel.SendMessageAsync(response);
             
             Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("");
             Console.WriteLine($"From: {GetFullUsername(socketMessage)}");
             Console.WriteLine(message);
             Console.WriteLine();
@@ -109,6 +108,7 @@ namespace RoboChat.Discord.Services
                                                          $"/session -delete (for admins and authors)\n" +
                                                          $"/session -ready (for authors)\n" +
                                                          $"/session -merge (for admins)\n" +
+                                                         $"/room -clear (for all)\n" +
                                                          $"/bot (for authors)```");
         }
 
@@ -223,6 +223,12 @@ namespace RoboChat.Discord.Services
         
         public async Task ClearRoom(SocketMessage socketMessage)
         {
+            if (GetThisRoomChatSession(socketMessage) != null)
+            {
+                await socketMessage.Channel.SendMessageAsync($"```You cannot clear the room, because there is an active session```");
+                return;
+            }
+
             await DeleteMessages(socketMessage);
             await SendResponseWithListOfCommands(socketMessage);
             await SendResponseWithInfoAboutOffline(socketMessage);

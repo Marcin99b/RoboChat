@@ -23,11 +23,20 @@ namespace RoboChat.Discord
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
+        private readonly Boolean isDebugMode;
+
         public Program()
         {
+            #if DEBUG
+                isDebugMode = true;
+                Console.WriteLine("Program is started in debug mode\n");
+            #else
+                isDebugMode = false;
+                Console.WriteLine("Program is started in release mode\n");
+            #endif
             sessionService = new SessionService();
         }
-
+        
         public async Task MainAsync()
         {
             this.client = new DiscordSocketClient(new DiscordSocketConfig
@@ -50,6 +59,7 @@ namespace RoboChat.Discord
         {
             var message = socketMessage.ToString();
             
+            // Checking the validity of message
             if (!message.StartsWith("/"))
             {
                 return;
@@ -59,13 +69,19 @@ namespace RoboChat.Discord
             {
                 return;
             }
-            
+
+            if (socketMessage.Channel.Name.Contains("test") != isDebugMode)
+            {
+                return;
+            }
+            // Here the message is finally checked
+
             if (message.StartsWith("/bot "))
             {
                 await sessionService.SendResponseToUser(socketMessage);
                 return;
             }
-
+            
             if (message.StartsWith("/session -start"))
             {
 
