@@ -25,12 +25,16 @@ namespace RoboChat.Discord.Controllers
 
         [Command("-start")]
         public async Task StartSession()
-        { 
-            await BotMessages.SendResponseWithLoading(socketMessage);
-            await roomService.ClearRoom(socketMessage);
+        {
+            if (SessionHelper.IsSessionInThisRoom(socketMessage, sessionService.ChatSessions))
+            {
+                await SessionMessages.CannotCreateSessionBecauseOtherUser(socketMessage);
+                return;
+            }
+            await this.DeleteSession();
+            
             await sessionService.CreateNewSession(socketMessage);
             await SessionMessages.SendResponseWithListOfCommands(socketMessage);
-            
         }
         
         [Command("-ready")]

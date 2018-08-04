@@ -13,5 +13,10 @@ namespace RoboChat.Discord.Messages
         {
             await socketMessage.Channel.SendMessageAsync($"**Loading... It may take a few seconds.**");
         }
+
+        public static async Task SendResponseWithInfoAboutOffline(SocketMessage socketMessage)
+        {
+            await socketMessage.Channel.SendMessageAsync("***```If bot \"RoboChat\" is offline, bot is not working!```***");
+        }
     }
 }

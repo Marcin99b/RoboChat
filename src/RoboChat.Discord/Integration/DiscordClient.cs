@@ -72,12 +72,14 @@ namespace RoboChat.Discord.Integration
             if (message.StartsWith("/session"))
             {
                 await controllersRouter.Sessions(socketMessage);
+                await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
                 return;
             }
 
             if (message.StartsWith("/room"))
             {
                 await controllersRouter.Rooms(socketMessage);
+                await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
                 return;
             }
 
