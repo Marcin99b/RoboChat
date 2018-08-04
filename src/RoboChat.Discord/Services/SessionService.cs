@@ -16,31 +16,7 @@ namespace RoboChat.Discord.Services
     {
 
         private static List<ChatSession> chatSessions = new List<ChatSession>();
-
-        //private readonly string sessionsFileName = @"Sessions.txt";
-
-        public SessionService()
-        {
-
-            /*if (!File.Exists(sessionsFileName))
-            {
-                try
-                {
-                    File.Create(sessionsFileName).Dispose();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            var sessions = JsonConvert.DeserializeObject<List<ChatSession>>(File.ReadAllText(sessionsFileName));
-            if (sessions != null)
-            {
-                chatSessions = sessions;
-            }
-            
-            */
-        }
+        
 
         public List<ChatSession> returnChatSessionList()
         {
@@ -104,24 +80,7 @@ namespace RoboChat.Discord.Services
             await socketMessage.Channel.SendMessageAsync($"```Session in room: {socketMessage.Channel.Name} has author: {session.SessionOwner}```");
         }
 
-        public async Task SendResponseWithListOfCommands(SocketMessage socketMessage)
-        {
-            await socketMessage.Channel.SendMessageAsync($"Commands: \n" +
-                                                         $"```/session -help (for all)\n" +
-                                                         $"/session -author (for all)\n" +
-                                                         $"/session -start (for all)\n" +
-                                                         $"/session -start -learn faster (for all)\n" +
-                                                         $"/session -delete (for admins and authors)\n" +
-                                                         $"/session -ready (for authors)\n" +
-                                                         $"/session -merge (for admins)\n" +
-                                                         $"/room -clear (for all)\n" +
-                                                         $"/bot or /b (for authors)```");
-        }
-
-        public async Task SendResponseWithLoading(SocketMessage socketMessage)
-        {
-            await socketMessage.Channel.SendMessageAsync($"**Loading... It may take a few seconds.**");
-        }
+        
 
         public async Task SendResponseWithInfoAboutOffline(SocketMessage socketMessage)
         {
@@ -212,7 +171,6 @@ namespace RoboChat.Discord.Services
                 await socketMessage.Channel.SendMessageAsync($"```Cannot delete session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
                 return;
             }
-            await SendResponseWithLoading(socketMessage);
             session.RoboChat.DeleteSessionChat();
             chatSessions.Remove(session);
             await socketMessage.Channel.SendMessageAsync($"```Deleted session for user: {session.SessionOwner} in room: {session.RoomName}```");
@@ -222,32 +180,7 @@ namespace RoboChat.Discord.Services
             await SendResponseWithInfoAboutOffline(socketMessage);
             UpdateSessionsFile();
         }
-
-        public async Task DeleteMessages(SocketMessage socketMessage)
-        {
-            var channel = socketMessage.Channel;
-            var messages = await channel.GetMessagesAsync().Flatten();
-            await channel.DeleteMessagesAsync(messages);
-        }
         
-        public async Task ClearRoom(SocketMessage socketMessage)
-        {
-            var session = await GetThisRoomChatSession(socketMessage);
-            if (session != null)
-            {
-                await socketMessage.Channel.SendMessageAsync($"```You cannot clear the room, because there is an active session```");
-                return;
-            }
-
-            await DeleteMessages(socketMessage);
-            await SendResponseWithListOfCommands(socketMessage);
-            await SendResponseWithInfoAboutOffline(socketMessage);
-        }
-
-        private void UpdateSessionsFile()
-        {
-            //File.WriteAllText(sessionsFileName, JsonConvert.SerializeObject(chatSessions));
-        }
 
         private string GetFullUsername(SocketMessage socketMessage)
             => $"{socketMessage.Author.Username}#{socketMessage.Author.Discriminator}";
