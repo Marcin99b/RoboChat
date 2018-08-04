@@ -159,6 +159,7 @@
     <Compile Include="ErrorMessages\SessionMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdminPanel.cs" />
     <Compile Include="Services\SessionService.cs" />
   </ItemGroup>
   <ItemGroup>
