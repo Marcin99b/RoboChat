@@ -18,6 +18,7 @@ namespace RoboChat.Discord
     public class Program
     {
         private readonly SessionService sessionService;
+        private readonly AdminPanel adminPanel;
         private DiscordSocketClient client;
 
         public static void Main(string[] args)
@@ -35,6 +36,7 @@ namespace RoboChat.Discord
                 Console.WriteLine("Program is started in release mode\n");
             #endif
             sessionService = new SessionService();
+            adminPanel = new AdminPanel(sessionService.returnChatSessionList(), isDebugMode);
         }
         
         public async Task MainAsync()
@@ -58,8 +60,14 @@ namespace RoboChat.Discord
         private async Task MessageReceived(SocketMessage socketMessage)
         {
             var message = socketMessage.ToString();
-            
+
             // Checking the validity of message
+            if (socketMessage.Channel.Name.Contains("admin-panel") && (message.StartsWith("./") || message.StartsWith("/")))
+            {
+                adminPanel.CheckCommand(socketMessage);
+                return;
+            }
+
             if (!message.StartsWith("/"))
             {
                 return;
@@ -76,7 +84,7 @@ namespace RoboChat.Discord
             }
             // Here the message is finally checked
 
-            if (message.StartsWith("/bot "))
+            if (message.StartsWith("/bot ") || message.StartsWith("/b "))
             {
                 await sessionService.SendResponseToUser(socketMessage);
                 return;

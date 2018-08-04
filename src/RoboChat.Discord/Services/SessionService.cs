@@ -16,6 +16,7 @@ namespace RoboChat.Discord.Services
     {
 
         private static List<ChatSession> chatSessions = new List<ChatSession>();
+
         //private readonly string sessionsFileName = @"Sessions.txt";
 
         public SessionService()
@@ -41,11 +42,16 @@ namespace RoboChat.Discord.Services
             */
         }
 
+        public List<ChatSession> returnChatSessionList()
+        {
+            return chatSessions;
+        }
+
         public async Task SendResponseToUser(SocketMessage socketMessage)
         {
-            var currentSssion = chatSessions.Where(x => x.RoomName == socketMessage.Channel.Name)
+            var currentSession = chatSessions.Where(x => x.RoomName == socketMessage.Channel.Name)
                 .FirstOrDefault(x => x.SessionOwner == GetFullUsername(socketMessage));
-            if (currentSssion == null)
+            if (currentSession == null)
             {
                 await socketMessage.Channel.SendMessageAsync($"```This room doesn't have any session. If you want to start a conversation, you need to write: /session -start```");
                 return;
@@ -57,7 +63,7 @@ namespace RoboChat.Discord.Services
                 message = message.TrimStart(" ".ToCharArray());
             }
 
-            var response = currentSssion.RoboChat.SendMessage(new TextLine(socketMessage.Author.Username, message));
+            var response = currentSession.RoboChat.SendMessage(new TextLine(socketMessage.Author.Username, message));
             if (response.StartsWith("/"))
             {
                 response = response.TrimStart("/".ToCharArray());
@@ -109,7 +115,7 @@ namespace RoboChat.Discord.Services
                                                          $"/session -ready (for authors)\n" +
                                                          $"/session -merge (for admins)\n" +
                                                          $"/room -clear (for all)\n" +
-                                                         $"/bot (for authors)```");
+                                                         $"/bot or /b (for authors)```");
         }
 
         public async Task SendResponseWithLoading(SocketMessage socketMessage)
