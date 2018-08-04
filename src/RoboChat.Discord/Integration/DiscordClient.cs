@@ -15,7 +15,7 @@ namespace RoboChat.Discord.Integration
 
         private readonly DiscordSocketClient client;
 
-        private readonly bool IsDebugMode;
+        private readonly bool IsDebugMode = System.Diagnostics.Debugger.IsAttached;
 
         public DiscordClient(ControllersRouter controllersRouter)
         {
@@ -49,10 +49,9 @@ namespace RoboChat.Discord.Integration
                 return;
             }
             
-            await BotMessages.SendResponseWithLoading(socketMessage);
-
             if (message.StartsWith("/admin"))
             {
+                await BotMessages.SendResponseWithLoading(socketMessage);
                 await controllersRouter.Admins(socketMessage);
                 return;
             }
@@ -61,16 +60,18 @@ namespace RoboChat.Discord.Integration
             {
                 return;
             }
-
+            
             if ((message.StartsWith("/bot") || message.StartsWith("/b"))
-                && socketMessage.Channel.Name.Contains("test") != System.Diagnostics.Debugger.IsAttached)
+                && socketMessage.Channel.Name.Contains("test") == IsDebugMode)
             {
                 await controllersRouter.Conversations(socketMessage);
                 return;
             }
-            
+
+
             if (message.StartsWith("/session"))
             {
+                await BotMessages.SendResponseWithLoading(socketMessage);
                 await controllersRouter.Sessions(socketMessage);
                 await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
                 return;
@@ -78,6 +79,7 @@ namespace RoboChat.Discord.Integration
 
             if (message.StartsWith("/room"))
             {
+                await BotMessages.SendResponseWithLoading(socketMessage);
                 await controllersRouter.Rooms(socketMessage);
                 await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
                 return;

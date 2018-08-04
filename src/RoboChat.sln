@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboChat.Library", "RoboChat.Library\RoboChat.Library.csproj", "{5A196BAD-3B23-427A-B285-EC183C40ECD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboChat.Console", "RoboChat.Console\RoboChat.Console.csproj", "{07B2D9D1-FDBE-4F70-B972-68BD65BBF0C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboChat.Discord", "RoboChat.Discord\RoboChat.Discord.csproj", "{CA8B9653-F930-4EF4-B263-97D1E4B8932E}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{5A196BAD-3B23-427A-B285-EC183C40ECD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A196BAD-3B23-427A-B285-EC183C40ECD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A196BAD-3B23-427A-B285-EC183C40ECD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07B2D9D1-FDBE-4F70-B972-68BD65BBF0C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07B2D9D1-FDBE-4F70-B972-68BD65BBF0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07B2D9D1-FDBE-4F70-B972-68BD65BBF0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07B2D9D1-FDBE-4F70-B972-68BD65BBF0C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA8B9653-F930-4EF4-B263-97D1E4B8932E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA8B9653-F930-4EF4-B263-97D1E4B8932E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA8B9653-F930-4EF4-B263-97D1E4B8932E}.Release|Any CPU.ActiveCfg = Release|Any CPU

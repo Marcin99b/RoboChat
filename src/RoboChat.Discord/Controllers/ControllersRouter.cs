@@ -54,15 +54,15 @@ namespace RoboChat.Discord.Controllers
 
         private async Task RunMethodInController<T>(T controller, SocketMessage socketMessage, string message) where T : BaseController
         {
-            var method = controller.GetType().GetMethods()
-                .FirstOrDefault(x => x.GetCustomAttribute<Command>().CommandMessage == message);
-            if (method == null)
+            try
+            {
+                var method = controller.GetType().GetTypeInfo().GetMethods()
+                    .First(x => x.GetCustomAttribute<Command>().CommandMessage == message);
+                await (Task) method.Invoke(controller, null);
+            }
+            catch
             {
                 await ErrorMessages.SendNotFoundCommand(socketMessage);
-            }
-            else
-            {
-                await (Task)method.Invoke(this, null);
             }
         }
     }

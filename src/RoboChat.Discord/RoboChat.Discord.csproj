@@ -156,10 +156,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorMessages\SessionMessages.cs" />
+    <Compile Include="ConsoleDisplay\PrintToConsole.cs" />
+    <Compile Include="Controllers\AdminsController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ControllersRouter.cs" />
+    <Compile Include="Controllers\ConversationsController.cs" />
+    <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\SessionsController.cs" />
+    <Compile Include="Helpers\ClientHelper.cs" />
+    <Compile Include="Helpers\SessionHelper.cs" />
+    <Compile Include="Helpers\Userhelper.cs" />
+    <Compile Include="Messages\BotMessages.cs" />
+    <Compile Include="Messages\ErrorMessages.cs" />
+    <Compile Include="Messages\SessionMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AdminPanel.cs" />
+    <Compile Include="Integration\DiscordClient.cs" />
+    <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\SessionService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -172,5 +186,6 @@
       <Name>RoboChat.Library</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
