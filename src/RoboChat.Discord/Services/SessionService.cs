@@ -21,7 +21,7 @@ namespace RoboChat.Discord.Services
         private static List<ChatSession> chatSessions = new List<ChatSession>();
         public IEnumerable<ChatSession> ChatSessions => chatSessions;
 
-        public List<ChatSession> returnChatSessionList()
+        public List<ChatSession> ReturnChatSessionList()
         {
             return chatSessions;
         }
@@ -46,15 +46,13 @@ namespace RoboChat.Discord.Services
             PrintToConsole.PrintMessages(socketMessage, message, response);
         }
 
-        private async Task<ChatSession> GetThisRoomChatSession(SocketMessage socketMessage)
+        public static async Task<ChatSession> GetThisRoomChatSession(SocketMessage socketMessage)
         {
             var sessionToMerge = chatSessions.FirstOrDefault(x => x.RoomName == socketMessage.Channel.Name);
 
             if (sessionToMerge == null)
-            {
-                await SessionMessages.NotFoundSession(socketMessage);
                 return null;
-            }
+            
             return sessionToMerge;
         }
 
@@ -63,9 +61,10 @@ namespace RoboChat.Discord.Services
             var session = await GetThisRoomChatSession(socketMessage);
             if (session == null)
             {
+                await SessionMessages.NotFoundSession(socketMessage);
                 return;
             }
-            await socketMessage.Channel.SendMessageAsync($"```Session in room: {socketMessage.Channel.Name} has author: {session.SessionOwner}```");
+            await SessionMessages.AuthorOfSession(socketMessage, session);
         }
         
         public async Task ReadyToMerge(SocketMessage socketMessage, IMessageChannel messageChannel)
@@ -78,12 +77,11 @@ namespace RoboChat.Discord.Services
 
             if (session.SessionOwner != Userhelper.GetFullUsername(socketMessage) && !Userhelper.IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"```Cannot set as ready session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
+                await SessionMessages.CannotSetAsReadyToMerge(socketMessage, session);
                 return;
             }
 
-            await socketMessage.Channel.SendMessageAsync($"```Admins have been notified about the session with user: {session.SessionOwner} in room: {session.RoomName}```");
-            await messageChannel.SendMessageAsync($"```Session with user: {session.SessionOwner} in room: {session.RoomName} is ready for merge```");
+            await SessionMessages.ReadyToMergeSession(socketMessage, session, messageChannel);
         }
 
         public async Task CreateNewSession(SocketMessage socketMessage)
@@ -98,7 +96,7 @@ namespace RoboChat.Discord.Services
             await SessionMessages.CreatedSession(socketMessage, newSession);
             if (learnFaster)
             {
-                await socketMessage.Channel.SendMessageAsync($"```css\nLearn faster mode activated\n```");
+                await SessionMessages.LearnFasterModeActivated(socketMessage);
             }
         }
 
@@ -111,12 +109,12 @@ namespace RoboChat.Discord.Services
             }
             if (!Userhelper.IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"```Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
+                await SessionMessages.CannotMergeBcsPermission(socketMessage, session);
                 return;
             }
             if (session.RoboChat.NumberOfMessagesInCurrentSession == 0)
             {
-                await socketMessage.Channel.SendMessageAsync($"```Cannot merge session for user: {session.SessionOwner} in room: {session.RoomName}, because this session doesn't contain any message```");
+                await SessionMessages.CannotMergeBcsEmptySession(socketMessage, session);
                 return;
             }
             
@@ -133,7 +131,7 @@ namespace RoboChat.Discord.Services
             }
             if (session.SessionOwner != Userhelper.GetFullUsername(socketMessage) && !Userhelper.IsAdmin(socketMessage))
             {
-                await socketMessage.Channel.SendMessageAsync($"```Cannot delete session for user: {session.SessionOwner} in room: {session.RoomName}, because you haven't permission```");
+                await SessionMessages.CannotDeleteSessionBcsPermission(socketMessage, session);
                 return;
             }
             session.RoboChat.DeleteSessionChat();

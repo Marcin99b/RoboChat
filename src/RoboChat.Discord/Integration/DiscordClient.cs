@@ -73,7 +73,6 @@ namespace RoboChat.Discord.Integration
             {
                 await BotMessages.SendResponseWithLoading(socketMessage);
                 await controllersRouter.Sessions(socketMessage);
-                await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
                 return;
             }
 

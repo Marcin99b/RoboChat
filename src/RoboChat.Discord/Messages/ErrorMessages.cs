@@ -11,7 +11,7 @@ namespace RoboChat.Discord.Messages
     {
         public static async Task SendNotFoundCommand(SocketMessage socketMessage)
         {
-            await socketMessage.Channel.SendMessageAsync($"**Not found command: {socketMessage.Content}**\nCheck did command should working in this room");
+            await socketMessage.Channel.SendMessageAsync($"**Not found command: {socketMessage.Content}**\nPlease make sure the command should work in this room");
         }
     }
 }
