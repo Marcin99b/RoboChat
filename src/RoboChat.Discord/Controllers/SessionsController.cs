@@ -31,10 +31,11 @@ namespace RoboChat.Discord.Controllers
                 await SessionMessages.CannotCreateSessionBecauseOtherUser(socketMessage);
                 return;
             }
-            await this.DeleteSession();
+            await roomService.ClearRoom(socketMessage);
             
             await sessionService.CreateNewSession(socketMessage);
             await SessionMessages.SendResponseWithListOfCommands(socketMessage);
+            await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
         }
         
         [Command("-ready")]
@@ -55,6 +56,8 @@ namespace RoboChat.Discord.Controllers
         {
             await sessionService.DeleteSession(socketMessage);
             await roomService.ClearRoom(socketMessage);
+            await SessionMessages.SendResponseWithListOfCommands(socketMessage);
+            await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
         }
 
         [Command("-help")]

@@ -13,10 +13,7 @@ namespace RoboChat.Discord.Controllers
 
         public async Task Conversations(SocketMessage socketMessage)
         {
-            var message = socketMessage.Content
-                .TrimStart("/bot".ToCharArray())
-                .TrimStart("/b".ToCharArray())
-                .TrimStart(" ".ToCharArray());
+            var message = socketMessage.Content.TrimStart("/bot ".ToCharArray());
 
             var controller = new ConversationsController(socketMessage);
             await controller.SendMessage(message);
@@ -24,9 +21,7 @@ namespace RoboChat.Discord.Controllers
 
         public async Task Admins(SocketMessage socketMessage)
         {
-            var message = socketMessage.Content
-                .TrimStart("/admin".ToCharArray())
-                .TrimStart(" ".ToCharArray());
+            var message = socketMessage.Content.TrimStart("/admin ".ToCharArray());
 
             var controller = new AdminsController(socketMessage);
             await this.RunMethodInController(controller, socketMessage, message);
@@ -34,9 +29,7 @@ namespace RoboChat.Discord.Controllers
 
         public async Task Sessions(SocketMessage socketMessage)
         {
-            var message = socketMessage.Content
-                .TrimStart("/session".ToCharArray())
-                .TrimStart(" ".ToCharArray());
+            var message = socketMessage.Content.TrimStart("/session ".ToCharArray());
 
             var controller = new SessionsController(socketMessage);
             await this.RunMethodInController(controller, socketMessage, message);
@@ -44,9 +37,7 @@ namespace RoboChat.Discord.Controllers
 
         public async Task Rooms(SocketMessage socketMessage)
         {
-            var message = socketMessage.Content
-                .TrimStart("/room".ToCharArray())
-                .TrimStart(" ".ToCharArray());
+            var message = socketMessage.Content.TrimStart("/room ".ToCharArray());
 
             var controller = new RoomsController(socketMessage);
             await this.RunMethodInController(controller, socketMessage, message);

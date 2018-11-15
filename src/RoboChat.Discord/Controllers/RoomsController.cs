@@ -21,8 +21,14 @@ namespace RoboChat.Discord.Controllers
         [Command("-clear")]
         public async Task ClearRoom()
         {
+            if (SessionService.GetThisRoomChatSession(socketMessage) != null)
+            {
+                await RoomMessages.CannotClearRoomBcsActiveSession(socketMessage);
+                return;
+            }
             await roomService.ClearRoom(socketMessage);
             await SessionMessages.SendResponseWithListOfCommands(socketMessage);
+            await BotMessages.SendResponseWithInfoAboutOffline(socketMessage);
         }
     }
 }

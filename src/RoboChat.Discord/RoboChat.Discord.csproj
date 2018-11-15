@@ -171,6 +171,7 @@
     <Compile Include="Helpers\Userhelper.cs" />
     <Compile Include="Messages\BotMessages.cs" />
     <Compile Include="Messages\ErrorMessages.cs" />
+    <Compile Include="Messages\RoomMessages.cs" />
     <Compile Include="Messages\SessionMessages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -42,7 +42,7 @@ namespace RoboChat.Discord
                 Console.WriteLine("Program is started in release mode\n");
             #endif
             sessionService = new SessionService();
-            adminPanel = new AdminPanel(sessionService.returnChatSessionList(), isDebugMode);
+            adminPanel = new AdminPanel(sessionService.ReturnChatSessionList(), isDebugMode);
         }
 
         
