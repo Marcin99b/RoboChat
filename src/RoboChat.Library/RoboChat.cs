@@ -11,7 +11,7 @@ using RoboChat.Library.Settings;
 
 namespace RoboChat.Library
 {
-    public class RoboChat
+    public class RoboChat : IRoboChat
     {
         private readonly SessionSettings sessionSettings;
         private readonly SessionService sessionService;
@@ -24,23 +24,24 @@ namespace RoboChat.Library
             this.conversationService = new ConversationService(sessionSettings, "RoboChat");
         }
 
-        public void MergeHistory()
+        public string SendMessage(string username, string message)
         {
-            sessionService.Merge();
-        }
-
-        public void DeleteSessionChat()
-        {
-            sessionService.Delete();
-        }
-
-        public string SendMessage(TextLine userMessage)
-        {
+            var userMessage = new TextLine(username, message);
             var lastMessage = sessionService.CurrentSessionMessagesHistory.LastOrDefault();
             var botReaction = conversationService.GetBotResponse(userMessage, sessionService.FullSessionMessagesHistory, lastMessage);
             sessionService.AddBotMessage(botReaction);
 
             return botReaction.RobotMessage.Message;
+        }
+
+        public void MergeSession()
+        {
+            sessionService.Merge();
+        }
+
+        public void DeleteSession()
+        {
+            sessionService.Delete();
         }
     }
 }

@@ -118,7 +118,7 @@ namespace RoboChat.Discord.Services
                 return;
             }
             
-            session.RoboChat.MergeHistory();
+            session.RoboChat.MergeSession();
             await SessionMessages.MergedSession(socketMessage, session);
         }
 
@@ -134,7 +134,7 @@ namespace RoboChat.Discord.Services
                 await SessionMessages.CannotDeleteSessionBcsPermission(socketMessage, session);
                 return;
             }
-            session.RoboChat.DeleteSessionChat();
+            session.RoboChat.DeleteSession();
             chatSessions.Remove(session);
             await SessionMessages.DeletedSession(socketMessage, session);
 
