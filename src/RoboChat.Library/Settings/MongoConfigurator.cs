@@ -17,7 +17,7 @@ namespace RoboChat.Library
         public static IMongoDatabase Connect()
         {
             //var connectionString = new MongoUrl("mongodb://chathistoryuser:eaugfb43eubagfb431naenfaei@ds237120.mlab.com:37120/robochat");
-            var connectionString = new MongoUrl("mongodb://admin:Admin123@ds020218.mlab.com:20218/discordbot");
+            var connectionString = new MongoUrl("mongodb://user:user123@ds225703.mlab.com:25703/trackmymoney");
             MongoClient client = new MongoClient(connectionString.ToString());
             return client.GetDatabase(connectionString.DatabaseName);
         }

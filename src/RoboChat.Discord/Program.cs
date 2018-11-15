@@ -26,7 +26,7 @@ namespace RoboChat.Discord
         public static void Main(string[] args)
         {
             new DiscordClient(new ControllersRouter())
-                .Run("NDY5MzU5MTIzMDc5NjI2NzYy.DjGkVQ.5RZG8B0KL0Ml9-tZXeXxKxEN_4I")
+                .Run("NTEyMzAxMTY2NzYwMjk2NDQ4.Ds3dnA.QyufpOCi_-PEJmcP1rR0MzB1jUk")
                 .GetAwaiter().GetResult();
         } 
 

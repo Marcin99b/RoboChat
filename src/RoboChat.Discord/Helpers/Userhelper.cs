@@ -13,6 +13,9 @@ namespace RoboChat.Discord.Helpers
             => $"{socketMessage.Author.Username}#{socketMessage.Author.Discriminator}";
 
         public static bool IsAdmin(SocketMessage message)
-            => ((SocketGuildUser)message.Author).Roles.Any(role => role.Name == "administracja");
+        {
+            return true;
+        }
+        // => ((SocketGuildUser)message.Author).Roles.Any(role => role.Name == "administracja");
     }
 }

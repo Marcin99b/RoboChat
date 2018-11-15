@@ -16,10 +16,11 @@ namespace RoboChat.Library
         
         private readonly List<HistoryMessage> basedMessagesHistory;
         private List<HistoryMessage> currentSessionMessagesHistory;
+
         public int NumberOfMessagesInCurrentSession => currentSessionMessagesHistory.Count;
         public IEnumerable<HistoryMessage> FullSessionMessagesHistory => basedMessagesHistory.mergeCollections(currentSessionMessagesHistory);
         public List<HistoryMessage> returnSessionMessagesHistory => currentSessionMessagesHistory;
-        private readonly string roboUsername;
+        private string roboUsername => "RoboChat";
 
         private readonly SmilarityProcessor smilarityProcessor;
         private readonly SessionSettings sessionSettings;
@@ -30,7 +31,6 @@ namespace RoboChat.Library
             smilarityProcessor = new SmilarityProcessor();
             sessionSettings = settings;
             currentSessionMessagesHistory = new List<HistoryMessage>();
-            this.roboUsername = $"RoboChat";
 
             try
             {

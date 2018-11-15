@@ -62,7 +62,7 @@ namespace RoboChat.Discord.Integration
             }
             
             if ((message.StartsWith("/bot") || message.StartsWith("/b"))
-                && socketMessage.Channel.Name.Contains("test") == IsDebugMode)
+                /*&& socketMessage.Channel.Name.Contains("test") == IsDebugMode*/)
             {
                 await controllersRouter.Conversations(socketMessage);
                 return;
