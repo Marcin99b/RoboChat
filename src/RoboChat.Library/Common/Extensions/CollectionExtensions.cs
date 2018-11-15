@@ -8,7 +8,7 @@ namespace RoboChat.Library
 {
     static class CollectionExtensions
     {
-        public static IEnumerable<T> mergeCollections<T>(this List<T> listFirst, List<T> listSecond)
+        public static IEnumerable<T> withCollection<T>(this List<T> listFirst, List<T> listSecond)
         {
             var x = listFirst;
             x.AddRange(listSecond);
