@@ -36,7 +36,7 @@ namespace RoboChat.Discord.Services
                 return;
             }
 
-            var response = currentSession.RoboChat.SendMessage(new TextLine(socketMessage.Author.Username, message));
+            var response = currentSession.RoboChat.SendMessage(socketMessage.Author.Username, message);
             if (response.StartsWith("/"))
             {
                 response = response.TrimStart("/".ToCharArray());

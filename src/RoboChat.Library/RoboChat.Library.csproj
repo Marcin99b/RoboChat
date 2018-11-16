@@ -65,19 +65,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChatSession.cs" />
-    <Compile Include="CollectionExtensions.cs" />
-    <Compile Include="Models\HistoryMessage.cs" />
+    <Compile Include="Conversation\ConversationService.cs" />
+    <Compile Include="IRoboChat.cs" />
+    <Compile Include="Session\ChatSession.cs" />
+    <Compile Include="Common\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Conversation\Models\HistoryMessage.cs" />
+    <Compile Include="Session\SessionService.cs" />
     <Compile Include="Settings\MongoConfigurator.cs" />
     <Compile Include="RoboChat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\SessionSettings.cs" />
-    <Compile Include="SmilarityProcessor.cs" />
-    <Compile Include="Models\TextLine.cs" />
-    <Compile Include="Models\ValidSentence.cs" />
+    <Compile Include="Common\SmilarityProcessor.cs" />
+    <Compile Include="Conversation\Models\TextLine.cs" />
+    <Compile Include="Conversation\Models\ValidSentence.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
